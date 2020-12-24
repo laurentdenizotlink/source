@@ -30,6 +30,50 @@
 			linux,code = <KEY_RESTART>;
 		};
 	};
+
+     sound {
+            compatible = "simple-audio-card";
+            simple-audio-card,name = "Audio-I2S";
+            simple-audio-card,format = "i2s";
+            simple-audio-card,widgets =
+                    "Speaker", "External Speaker",
+                    "Microphone", "Microphone Jack";
+
+            simple-audio-card,dai-link@0{
+                format = "i2s";
+                cpu {
+                    sound-dai = <&i2s>;
+                };
+                codec {
+                    sound-dai = <&codec_out>;
+               };
+           };
+
+           simple-audio-card,dai-link@1{
+               format = "i2s";
+               cpu {
+                   sound-dai = <&i2s>;
+               };
+               codec {
+                   sound-dai = <&codec_in>;
+               };
+           };
+
+    };
+
+    codec_out: txcodec {
+        #sound-dai-cells = <0>;
+        #address-cells = <0>;
+        #size-cells = <0>;
+        compatible = "linux,spdif-dit";
+        status = "okay";
+    };
+
+    codec_in: rxcodec {
+        #sound-dai-cells = <0>;
+        compatible = "linux,spdif-dir";
+    };
+
 };
 
 &pinctrl {
@@ -51,7 +95,7 @@
 
 		i2s {
 			ralink,group = "i2s";
-			ralink,function = "gpio";
+			ralink,function = "i2s";
 		};
 
 		spis {
@@ -84,6 +128,11 @@
 			ralink,function = "gpio";
 		};
 	};
+};
+
+&i2s {
+	#sound-dai-cells = <0>;
+	status = "okay";
 };
 
 &gpio1 {
