@@ -122,7 +122,6 @@ define KernelPackage/sound-mt7620
 	CONFIG_SND_SIMPLE_CARD \
 	CONFIG_SND_SIMPLE_CARD_UTILS \
   	CONFIG_SND_SOC_PCM5102A
-  	
   FILES:= \
 	$(LINUX_DIR)/sound/soc/ralink/snd-soc-ralink-i2s.ko \
 	$(LINUX_DIR)/sound/soc/generic/snd-soc-simple-card.ko \

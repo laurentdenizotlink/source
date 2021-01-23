@@ -30,50 +30,28 @@
 			linux,code = <KEY_RESTART>;
 		};
 	};
+	sound {
+		compatible = "simple-audio-card";
+		simple-audio-card,name = "Audio-I2S";
+		simple-audio-card,format = "i2s";
+		simple-audio-card,bitclock-master = <&cpu_master>;
+		simple-audio-card,frame-master = <&cpu_master>;
+		simple-audio-card,widgets =
+			"Speaker", "External Speaker";
 
-     sound {
-            compatible = "simple-audio-card";
-            simple-audio-card,name = "Audio-I2S";
-            simple-audio-card,format = "i2s";
-            simple-audio-card,widgets =
-                    "Speaker", "External Speaker",
-                    "Microphone", "Microphone Jack";
+		cpu_master: simple-audio-card,cpu {
+			sound-dai = <&i2s>;
+		};
 
-            simple-audio-card,dai-link@0{
-                format = "i2s";
-                cpu {
-                    sound-dai = <&i2s>;
-                };
-                codec {
-                    sound-dai = <&codec_out>;
-               };
-           };
+		simple-audio-card,codec {
+			sound-dai = <&codec>;
+		};
+	};
 
-           simple-audio-card,dai-link@1{
-               format = "i2s";
-               cpu {
-                   sound-dai = <&i2s>;
-               };
-               codec {
-                   sound-dai = <&codec_in>;
-               };
-           };
-
-    };
-
-    codec_out: txcodec {
-        #sound-dai-cells = <0>;
-        #address-cells = <0>;
-        #size-cells = <0>;
-        compatible = "linux,spdif-dit";
-        status = "okay";
-    };
-
-    codec_in: rxcodec {
-        #sound-dai-cells = <0>;
-        compatible = "linux,spdif-dir";
-    };
-
+  	codec: pcm5102a {
+		#sound-dai-cells = <0>;
+    		compatible = "ti,pcm5102a";
+  	};
 };
 
 &pinctrl {
@@ -128,11 +106,6 @@
 			ralink,function = "gpio";
 		};
 	};
-};
-
-&i2s {
-	#sound-dai-cells = <0>;
-	status = "okay";
 };
 
 &gpio1 {
@@ -215,4 +188,13 @@
 
 &pwm {
 	status = "okay";
+};
+
+&gdma {
+	status = "okay";
+};
+
+&i2s {
+	#sound-dai-cells = <0>;
+ 	status = "okay";
 };
